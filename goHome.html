@@ -58,9 +58,11 @@
         $(() => {
             let day = new Date();
             if (day.getHours() >= 9) {
-                var time = (100 / (9 * 60 * 60)) * (((day.getHours()* 60 * 60 + day.getMinutes() * 60 + day.getSeconds() * 60) - 9 * 60 * 60));
-                console.log(day.getHours() - 9);
-                console.log(time);
+                var time = (100 / (9 * 60 * 60))
+                         * (((day.getHours()* 60 * 60 
+                            + day.getMinutes() * 60
+                            + day.getSeconds() * 60
+                            + day.getMilliseconds() / 1000) - 9 * 60 * 60));
                 goHomeBar(time);
             };
         });

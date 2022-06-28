@@ -71,8 +71,10 @@
         }, 1);
 
         $(() => {
+            $('#hidden-goods').hide();
             let day = new Date();
             if (day.getHours() >= 9) {
+                $('#day-bar').show();
                 var time = (100 / (9 * 60 * 60))
                          * (((day.getHours()* 60 * 60 
                             + day.getMinutes() * 60

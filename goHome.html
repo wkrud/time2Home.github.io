@@ -37,6 +37,7 @@
         <div id="day-bar">
             <div id="dBar"></div>
         </div>
+        <div id="hidden-goods"></div>
     </div>
     <script>
         
@@ -54,7 +55,8 @@
                 curTime = day.getHours();
             } else {
                 curTime = day.getHours() % 12;
-            }
+            };
+
             let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate());
             let time = (amPm + ' ' + curTime + ":" + day.getMinutes() + ":" + day.getSeconds());
             let millis = day.getMilliseconds();
@@ -82,14 +84,15 @@
 
         function goHomeBar(time) {          
             var progress = time;
-            var startInterval = setInterval(frame, 1000);
-            
+            var startInterval = setInterval(frame, 0.99999);
             function frame() {
                 if (progress >= 100) {
-                    $('#dBar').attr('width', '100%');
+                    $('#day-bar').hide();
+                    $('#hidden-goods').text('퇴근!!!');
+                    $('#hidden-goods').show();
                     clearInterval(startInterval);
                 } else {
-                    progress += (100 / (9 * 60 * 60));
+                    progress += (100 / (9 * 60 * 60 * 1000));
                     let textProgress = Math.floor(progress) + '%';
                     $('#dBar').css('width', textProgress);
                     $('#dBar').text(Math.floor(progress * 10000) / 10000 + '%');

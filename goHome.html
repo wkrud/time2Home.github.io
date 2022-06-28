@@ -78,9 +78,10 @@
                 var time = (100 / (9 * 60 * 60))
                          * (((day.getHours()* 60 * 60 
                             + day.getMinutes() * 60
-                            + day.getSeconds() * 60
+                            + day.getSeconds()
                             + day.getMilliseconds() / 1000) - 9 * 60 * 60));
-                goHomeBar(time);
+                // goHomeBar(time); // interval
+                goTimeOut(time, 100); // timeout
             };
         });
 
@@ -100,6 +101,23 @@
                     $('#dBar').text(Math.floor(progress * 10000) / 10000 + '%');
                 };
             };
+        };
+
+        function goTimeOut(from, to) {
+            let current = from;
+
+            setTimeout(function go() {
+                let perc = Math.floor(current) + '%';
+                // console.log(perc);
+                // console.log(current);
+                // console.log(to);
+                $('#dBar').css('width', perc);
+                $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
+                if (current < to) {
+                    setTimeout(go, 1);
+                };
+                current += (100 / (9 * 60 * 60 * 1000));
+            }, 1);
         };
     </script>
 </body>

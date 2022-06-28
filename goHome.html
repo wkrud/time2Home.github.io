@@ -31,8 +31,8 @@
     <div id="day-wrapper">
         <div id="dayDiv">
             <h1></h1>
-            <h2></h2>
-            <h3></h3>
+            <h2 style="display: inline-block;"></h2>
+            <h3 style="display: inline-block;"></h3>
         </div>
         <div id="day-bar">
             <div id="dBar"></div>
@@ -60,10 +60,11 @@
             let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate());
             let time = (amPm + ' ' + curTime + ":" + day.getMinutes() + ":" + day.getSeconds());
             let millis = day.getMilliseconds();
+            let h3Text = millis + '지루하면 보는 밀리초';
 
             $('#dayDiv > h1').text(today);
             $('#dayDiv > h2').text(time);
-            $('#dayDiv > h3').text(millis);
+            $('#dayDiv > h3').text(h3Text);
         };
 
         setInterval(function() {
@@ -74,29 +75,28 @@
             $('#hidden-goods').hide();
             let day = new Date();
             if (day.getHours() >= 9) {
+                var time = (100 / (9 * 60 * 60 * 1000))
+                         * (((day.getHours()* 60 * 60 * 1000
+                            + day.getMinutes() * 60 * 1000
+                            + day.getSeconds() * 1000
+                            + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
                 $('#day-bar').show();
-                var time = (100 / (9 * 60 * 60))
-                         * (((day.getHours()* 60 * 60 
-                            + day.getMinutes() * 60
-                            + day.getSeconds()
-                            + day.getMilliseconds() / 1000) - 9 * 60 * 60));
                 // goHomeBar(time); // interval
                 goTimeOut(time, 100); // timeout
             };
         });
 
-        function goHomeBar(time) {          
-            var progress = time;
+        function goHomeBar(time) {
             var startInterval = setInterval(frame, 1);
             function frame() {
-                if (progress >= 100) {
+                if (time >= 100) {
                     endMsg();
                     clearInterval(startInterval);
                 } else {
-                    progress += (100 / (9 * 60 * 60 * 1000));
-                    let textProgress = Math.floor(progress) + '%';
+                    time += (100 / (9 * 60 * 60 * 1000));
+                    let textProgress = Math.floor(time) + '%';
                     $('#dBar').css('width', textProgress);
-                    $('#dBar').text(Math.floor(progress * 10000) / 10000 + '%');
+                    $('#dBar').text(Math.floor(time * 10000) / 10000 + '%');
                 };
             };
         };
@@ -112,7 +112,7 @@
                 $('#dBar').css('width', perc);
                 $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
                 if (current < to) {
-                    setTimeout(go, .5);
+                    setTimeout(go, .499999);
                 } else {
                     endMsg();
                 };

@@ -42,14 +42,21 @@
         
         function thisTime () {
             let day = new Date();
-            let curTime = 0;
+            let amPm = '';
             if (day.getHours() < 12) {
+                amPm = 'AM';
+            } else {
+                amPm = 'PM';
+            };
+
+            let curTime = 0;
+            if (day.getHours() == 12) {
                 curTime = day.getHours();
             } else {
                 curTime = day.getHours() % 12;
             }
             let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate());
-            let time = (curTime + ":" + day.getMinutes() + ":" + day.getSeconds());
+            let time = (amPm + ' ' + curTime + ":" + day.getMinutes() + ":" + day.getSeconds());
             let millis = day.getMilliseconds();
 
             $('#dayDiv > h1').text(today);

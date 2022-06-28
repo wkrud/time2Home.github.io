@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <style>
+        #day-wrapper {
+            width: 500px;
+        }
+
+        #day-bar {
+            width: 100%;
+            height: 30px;
+            background-color: grey;
+            text-align: center;
+            color: aliceblue;
+        }
+
+        #dBar {
+            width: 1%;
+            height: 30px;
+            background-color: green;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="day-wrapper">
+        <div id="dayDiv">
+            <h1></h1>
+            <h2></h2>
+            <h3></h3>
+        </div>
+        <div id="day-bar">
+            <div id="dBar"></div>
+        </div>
+    </div>
+    <script>
+        
+        function thisTime () {
+            let day = new Date();
+            let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate());
+            let time = (day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds());
+            let millis = day.getMilliseconds();
+
+            $('#dayDiv > h1').text(today);
+            $('#dayDiv > h2').text(time);
+            $('#dayDiv > h3').text(millis);
+        };
+
+        setInterval(function() {
+            thisTime();
+        }, 1);
+
+        $(() => {
+            let day = new Date();
+            if (day.getHours() >= 9) {
+                var time = (100 / (9 * 60 * 60)) * (((day.getHours()* 60 * 60 + day.getMinutes() * 60 + day.getSeconds() * 60) - 9 * 60 * 60));
+                console.log(day.getHours() - 9);
+                console.log(time);
+                goHomeBar(time);
+            };
+        });
+
+        function goHomeBar(time) {          
+            var progress = time;
+            var startInterval = setInterval(frame, 1000);
+            
+            function frame() {
+                var bar = document.getElementById('dBar');
+                if (progress >= 100) {
+                    $('#dBar').attr('width', '100%');
+                    clearInterval(startInterval);
+                } else {
+                    progress += (100 / (9 * 60 * 60));
+                    let textProgress = Math.floor(progress) + '%';
+                    $('#dBar').css('width', textProgress);
+                    $('#dBar').text(textProgress);
+                };
+            };
+        };
+    </script>
+</body>
+</html>

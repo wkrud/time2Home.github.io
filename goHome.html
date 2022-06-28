@@ -70,7 +70,6 @@
             var startInterval = setInterval(frame, 1000);
             
             function frame() {
-                var bar = document.getElementById('dBar');
                 if (progress >= 100) {
                     $('#dBar').attr('width', '100%');
                     clearInterval(startInterval);
@@ -78,7 +77,7 @@
                     progress += (100 / (9 * 60 * 60));
                     let textProgress = Math.floor(progress) + '%';
                     $('#dBar').css('width', textProgress);
-                    $('#dBar').text(textProgress);
+                    $('#dBar').text(Math.floor(progress * 10000) / 10000 + '%');
                 };
             };
         };

@@ -90,9 +90,7 @@
             var startInterval = setInterval(frame, 1);
             function frame() {
                 if (progress >= 100) {
-                    $('#day-bar').hide();
-                    $('#hidden-goods').text('퇴근!!!');
-                    $('#hidden-goods').show();
+                    endMsg();
                     clearInterval(startInterval);
                 } else {
                     progress += (100 / (9 * 60 * 60 * 1000));
@@ -115,9 +113,17 @@
                 $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
                 if (current < to) {
                     setTimeout(go, 1);
+                } else {
+                    endMsg();
                 };
                 current += (100 / (9 * 60 * 60 * 1000));
             }, 1);
+        };
+
+        function endMsg() {
+            $('#day-bar').hide();
+            $('#hidden-goods').text('퇴근!!!');
+            $('#hidden-goods').show();
         };
     </script>
 </body>

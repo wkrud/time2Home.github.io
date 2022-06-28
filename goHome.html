@@ -112,12 +112,12 @@
                 $('#dBar').css('width', perc);
                 $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
                 if (current < to) {
-                    setTimeout(go, 1);
+                    setTimeout(go, .5);
                 } else {
                     endMsg();
                 };
                 current += (100 / (9 * 60 * 60 * 1000));
-            }, 1);
+            }, .5);
         };
 
         function endMsg() {

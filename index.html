@@ -49,7 +49,7 @@
         <div id="hidden-goods"></div>
     </div>
     <script>
-        
+
         function thisTime () {
             let day = new Date();
             let amPm = '';
@@ -71,34 +71,40 @@
             let millis = day.getMilliseconds();
             let h3Text = millis + '지루하면 보는 밀리초';
 
+            var startHour = $('#enter-hour').val();
+            var endHour = $('#enter-hour').val() * 60 * 60 * 1000 + $('#work-hour').val() * 60 * 60 * 1000;
+
             $('#dayDiv > h1').text(today);
             $('#dayDiv > h2').text(time);
             $('#dayDiv > h3').text(h3Text);
             
-            // var current = (100 / (9 * 60 * 60 * 1000))
-            //              * (((day.getHours() * 60 * 60 * 1000
-            //                 + day.getMinutes() * 60 * 1000
-            //                 + day.getSeconds() * 1000
-            //                 + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
-
-            var current = (100 / ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))
+            var current = (100 / (9 * 60 * 60 * 1000))
                          * (((day.getHours() * 60 * 60 * 1000
                             + day.getMinutes() * 60 * 1000
                             + day.getSeconds() * 1000
-                            + day.getMilliseconds()) - ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000)));
-                            
-            // if (current <= 100 && (day.getHours() > $('#enter-hour').val() 
-            // || (day.getHours() == $('#enter-hour').val() && day.getMinutes() >= $('#enter-minute').val()))) {
-            //     let perc = Math.floor(current) + '%';
-            //     $('#dBar').css('width', perc);
-            //     $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
-            // };
+                            + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
 
-            if (current <= 100 && day.getHours() > 9) {
+            // 시작시간 적용
+            // var current = (100 / ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))
+            //              * (((day.getHours() * 60 * 60 * 1000
+            //                 + day.getMinutes() * 60 * 1000
+            //                 + day.getSeconds() * 1000
+            //                 + day.getMilliseconds()) - ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))) - startHour;
+                            
+            // 시작시간 적용
+            if (current <= 100 && (day.getHours() > $('#enter-hour').val() 
+            || (day.getHours() == $('#enter-hour').val() && day.getMinutes() >= $('#enter-minute').val()))) {
                 let perc = Math.floor(current) + '%';
                 $('#dBar').css('width', perc);
                 $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
             };
+
+            // if (current <= 100 && day.getHours() > 9) {
+            //     let perc = Math.floor(current) + '%';
+            //     // console.log(current);
+            //     $('#dBar').css('width', perc);
+            //     $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
+            // };
         };
 
         setInterval(function() {

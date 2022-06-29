@@ -30,6 +30,15 @@
 <body>
     <div id="day-wrapper">
         <div id="dayDiv">
+            <div id="enter-time-wrapper">
+                <label for="">출근시간 : </label><br>
+                <input type="number" id="enter-hour" value="9">시
+                <input type="number" id="enter-minute" value="0">분
+                <br>
+                <label for="">근무시간(점심포함) : </label><br>
+                <input type="number" id="work-hour" value="9">시
+                <input type="number" id="work-minute" value="0">분
+            </div>
             <h1></h1>
             <h2 style="display: inline-block;"></h2>
             <h3 style="display: inline-block;"></h3>
@@ -65,14 +74,27 @@
             $('#dayDiv > h1').text(today);
             $('#dayDiv > h2').text(time);
             $('#dayDiv > h3').text(h3Text);
+            
+            // var current = (100 / (9 * 60 * 60 * 1000))
+            //              * (((day.getHours() * 60 * 60 * 1000
+            //                 + day.getMinutes() * 60 * 1000
+            //                 + day.getSeconds() * 1000
+            //                 + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
 
-            var current = (100 / (9 * 60 * 60 * 1000))
-                         * (((day.getHours()* 60 * 60 * 1000
+            var current = (100 / ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))
+                         * (((day.getHours() * 60 * 60 * 1000
                             + day.getMinutes() * 60 * 1000
                             + day.getSeconds() * 1000
-                            + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
+                            + day.getMilliseconds()) - ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000)));
+                            
+            // if (current <= 100 && (day.getHours() > $('#enter-hour').val() 
+            // || (day.getHours() == $('#enter-hour').val() && day.getMinutes() >= $('#enter-minute').val()))) {
+            //     let perc = Math.floor(current) + '%';
+            //     $('#dBar').css('width', perc);
+            //     $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
+            // };
 
-            if (current <= 100 && day.getHours() >= 9) {
+            if (current <= 100 && day.getHours() > 9) {
                 let perc = Math.floor(current) + '%';
                 $('#dBar').css('width', perc);
                 $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');

@@ -65,60 +65,23 @@
             $('#dayDiv > h1').text(today);
             $('#dayDiv > h2').text(time);
             $('#dayDiv > h3').text(h3Text);
+
+            var current = (100 / (9 * 60 * 60 * 1000))
+                         * (((day.getHours()* 60 * 60 * 1000
+                            + day.getMinutes() * 60 * 1000
+                            + day.getSeconds() * 1000
+                            + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
+
+            if (current <= 100 && day.getHours() >= 9) {
+                let perc = Math.floor(current) + '%';
+                $('#dBar').css('width', perc);
+                $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
+            };
         };
 
         setInterval(function() {
             thisTime();
         }, 1);
-
-        $(() => {
-            $('#hidden-goods').hide();
-            let day = new Date();
-            if (day.getHours() >= 9) {
-                var time = (100 / (9 * 60 * 60 * 1000))
-                         * (((day.getHours()* 60 * 60 * 1000
-                            + day.getMinutes() * 60 * 1000
-                            + day.getSeconds() * 1000
-                            + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
-                $('#day-bar').show();
-                // goHomeBar(time); // interval
-                goTimeOut(time, 100); // timeout
-            };
-        });
-
-        function goHomeBar(time) {
-            var startInterval = setInterval(frame, 1);
-            function frame() {
-                if (time >= 100) {
-                    endMsg();
-                    clearInterval(startInterval);
-                } else {
-                    time += (100 / (9 * 60 * 60 * 1000));
-                    let textProgress = Math.floor(time) + '%';
-                    $('#dBar').css('width', textProgress);
-                    $('#dBar').text(Math.floor(time * 10000) / 10000 + '%');
-                };
-            };
-        };
-
-        function goTimeOut(from, to) {
-            let current = from;
-
-            setTimeout(function go() {
-                let perc = Math.floor(current) + '%';
-                // console.log(perc);
-                // console.log(current);
-                // console.log(to);
-                $('#dBar').css('width', perc);
-                $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
-                if (current < to) {
-                    setTimeout(go, .499999);
-                } else {
-                    endMsg();
-                };
-                current += (100 / (9 * 60 * 60 * 1000));
-            }, .5);
-        };
 
         function endMsg() {
             $('#day-bar').hide();

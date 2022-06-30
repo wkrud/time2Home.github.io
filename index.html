@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Valuelinku 근무시간</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <style>
         #day-wrapper {
@@ -46,10 +46,66 @@
         <div id="day-bar">
             <div id="dBar"></div>
         </div>
+        <div id=" endTime">
+            <h2>점심시간 : <span id="lunch"></span></h2>
+            <h2>퇴근시간 : <span id="home"></span></h2>
+        </div>
         <div id="hidden-goods"></div>
     </div>
     <script>
+        let comeTime = 9 * 60;
+        let workTime = 9 * 60;
+        let millis = 0;
+        let seconds = 0;
+        let minutes = 0;
+        let hours = 0;
+        let days = 0;
+        let krDays = '';
+        const week = ['일', '월', '화', '수', '목', '금', '토'];
+        
+        let current = 0;
+        let startHour = 0;
+        let endHour = 0;
 
+        let enterHour = $('#enter-hour');
+        let enterMinute = $('#enter-minute');
+        let workHour = $('#work-hour');
+        let workMinute = $('#work-minute');
+        
+        $(document).ready(function(){
+            enterHour.on('input', function(){
+                if(this.value > 14 || this.value <0){
+                    alert("제대로 적으십쇼");
+                    enterHour.val(9);
+                }
+                else{
+                    comeTime = (this.value * 60) + enterMinute.val;
+                    calcTime();
+                } 
+            })
+            enterMinute.on('input', function(){
+                if(this.value > 60 || this.value <0){
+                    alert("제대로 적으십쇼");
+                    enterMinute.val(0);
+                }
+                else {comeTime = this.value + (enterHour.val*60); calcTime();}
+            })
+            workHour.on('input', function(){
+                if(this.value < 0){
+                    alert("제대로 적으십쇼");
+                    enterHour.val(9);
+                }
+                else {workTime = (this.value * 60) + workMinute.val; calcTime();}
+            })
+            workMinute.on('input', function(){
+                if(this.value <0 ||this.value > 60){
+                    alert("제대로 적으십쇼");
+                    enterHour.val(0);
+                }
+                else {workTime = this.value + (workHour.val*60); calcTime();}
+            })
+        });
+        
         function thisTime () {
             let day = new Date();
             let amPm = '';
@@ -65,25 +121,39 @@
             } else {
                 curTime = day.getHours() % 12;
             };
+            seconds = day.getSeconds();
+            minutes = day.getMinutes();
+            hours = day.getHours();
+            millis = day.getMilliseconds();            
+            days =day.getDay();            
+            krDays = week[days];
 
-            let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate());
-            let time = (amPm + ' ' + curTime + ":" + day.getMinutes() + ":" + day.getSeconds());
-            let millis = day.getMilliseconds();
+            startHour = enterHour.val();
+            endHour = enterHour.val() * 60 * 60 * 1000 + workHour.val() * 60 * 60 * 1000;
+
+            if (days == 0 || days == 6) {
+                // 주말의 경우
+            };
+
+            let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate() + " " + krDays + "요일");
+            let time = (amPm + ' ' + curTime + ":" + minutes + ":" + seconds);
             let h3Text = millis + '지루하면 보는 밀리초';
-
-            var startHour = $('#enter-hour').val();
-            var endHour = $('#enter-hour').val() * 60 * 60 * 1000 + $('#work-hour').val() * 60 * 60 * 1000;
 
             $('#dayDiv > h1').text(today);
             $('#dayDiv > h2').text(time);
             $('#dayDiv > h3').text(h3Text);
             
-            var current = (100 / (9 * 60 * 60 * 1000))
-                         * (((day.getHours() * 60 * 60 * 1000
-                            + day.getMinutes() * 60 * 1000
-                            + day.getSeconds() * 1000
-                            + day.getMilliseconds()) - 9 * 60 * 60 * 1000));
-
+            current = (100 / (9 * 60 * 60 * 1000))
+                      * (((hours * 60 * 60 * 1000
+                         + minutes * 60 * 1000
+                         + seconds * 1000
+                         + millis) - startHour * 60 * 60 * 1000));
+            // current = (100 / (9 * 60 * 60 * 1000))
+            //           * (((hours * 60 * 60 * 1000
+            //              + minutes * 60 * 1000
+            //              + seconds * 1000
+            //              + millis) - 9 * 60 * 60 * 1000));
+                         
             // 시작시간 적용
             // var current = (100 / ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))
             //              * (((day.getHours() * 60 * 60 * 1000
@@ -92,8 +162,8 @@
             //                 + day.getMilliseconds()) - ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))) - startHour;
                             
             // 시작시간 적용
-            if (current <= 100 && (day.getHours() > $('#enter-hour').val() 
-            || (day.getHours() == $('#enter-hour').val() && day.getMinutes() >= $('#enter-minute').val()))) {
+            if (current <= 100 && (hours > startHour
+            || (hours == startHour && minutes >= enterMinute.val()))) {
                 let perc = Math.floor(current) + '%';
                 $('#dBar').css('width', perc);
                 $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
@@ -109,7 +179,33 @@
 
         setInterval(function() {
             thisTime();
+            calcTime();           
         }, 1);
+
+        function calcTime(){
+            //점심 11:45분
+            if(hours*60 + minutes<11* 60 + 45){
+                let time = 11*60+45 - (hours*60 + minutes);
+                $('#lunch').text(parseInt(time/60)+'시간'+(time%60)+'분 전')
+            }
+            else{
+                $('#lunch').text('점심 끝')
+            }
+            if(hours<= 18){  
+                    let time = 18 * 60-( (9 * 60) - parseInt(comeTime) ) - (hours*60 + minutes);
+                    
+                    if(days ==3) { time = time -30 }
+                   
+                    if(time< 60){
+                        $('#home').text((time%60)+'분 전')
+                        $('#home').css('color', 'red');
+                    }
+                    else{
+                        $('#home').text(parseInt(time/60)+'시간'+(time%60)+'분 전')
+                        $('#home').css('color', 'black');
+                    }
+            }
+        }
 
         function endMsg() {
             $('#day-bar').hide();

@@ -130,9 +130,14 @@
 
             startHour = enterHour.val();
             endHour = enterHour.val() * 60 * 60 * 1000 + workHour.val() * 60 * 60 * 1000;
+            let millisTime = hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000 + millis;
+            let millisStartHour = startHour * 60 * 60 * 1000;
 
             if (days == 0 || days == 6) {
                 // 주말의 경우
+                endMsg('WEND');
+            } else if ((millisTime- millisStartHour) <= 0) {
+                endMsg('END');
             };
 
             let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate() + " " + krDays + "요일");
@@ -142,12 +147,8 @@
             $('#dayDiv > h1').text(today);
             $('#dayDiv > h2').text(time);
             $('#dayDiv > h3').text(h3Text);
-            
-            current = (100 / (9 * 60 * 60 * 1000))
-                      * (((hours * 60 * 60 * 1000
-                         + minutes * 60 * 1000
-                         + seconds * 1000
-                         + millis) - startHour * 60 * 60 * 1000));
+
+            current = (100 / (workHour.val() * 60 * 60 * 1000)) * (millisTime - millisStartHour);
             // current = (100 / (9 * 60 * 60 * 1000))
             //           * (((hours * 60 * 60 * 1000
             //              + minutes * 60 * 1000
@@ -207,10 +208,14 @@
             }
         }
 
-        function endMsg() {
+        function endMsg(res) {
             $('#day-bar').hide();
-            $('#hidden-goods').text('퇴근!!!');
             $('#hidden-goods').show();
+            if (res == 'END') {
+                $('#hidden-goods').text('퇴근!!!');
+            } else if (res = 'WEND') {
+                $('#hidden-goods').text('주말!!!');
+            };
         };
     </script>
 

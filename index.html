@@ -53,6 +53,7 @@
         <div id="hidden-goods"></div>
     </div>
     <script>
+        let amPm = '';
         let comeTime = 9 * 60;
         let workTime = 9 * 60;
         let millis = 0;
@@ -74,41 +75,47 @@
         
         $(document).ready(function(){
             enterHour.on('input', function(){
+                comeTime = 9 * 60;
                 if(this.value > 14 || this.value <0){
                     alert("제대로 적으십쇼");
                     enterHour.val(9);
                 }
                 else{
-                    comeTime = (this.value * 60) + enterMinute.val;
+                    comeTime = (parseInt(enterHour.val()) * 60) + parseInt(enterMinute.val());
                     calcTime();
                 } 
             })
             enterMinute.on('input', function(){
+                comeTime = 9 * 60;
                 if(this.value > 60 || this.value <0){
                     alert("제대로 적으십쇼");
                     enterMinute.val(0);
                 }
-                else {comeTime = this.value + (enterHour.val*60); calcTime();}
+                else {
+                    comeTime = parseInt(enterMinute.val()) + (parseInt(enterHour.val())*60); 
+                    calcTime();
+
+                }
             })
             workHour.on('input', function(){
                 if(this.value < 0){
                     alert("제대로 적으십쇼");
                     enterHour.val(9);
                 }
-                else {workTime = (this.value * 60) + workMinute.val; calcTime();}
+                else {workTime = (this.value * 60) + workMinute.val(); calcTime();}
             })
             workMinute.on('input', function(){
                 if(this.value <0 ||this.value > 60){
                     alert("제대로 적으십쇼");
                     enterHour.val(0);
                 }
-                else {workTime = this.value + (workHour.val*60); calcTime();}
+                else {workTime = this.value + (workHour.val()*60); calcTime();}
             })
         });
         
         function thisTime () {
             let day = new Date();
-            let amPm = '';
+            
             if (day.getHours() < 12) {
                 amPm = 'AM';
             } else {
@@ -148,7 +155,11 @@
             $('#dayDiv > h2').text(time);
             $('#dayDiv > h3').text(h3Text);
 
-            current = (100 / (workHour.val() * 60 * 60 * 1000)) * (millisTime - millisStartHour);
+            if (days == 4) {
+                current = (100 / (workHour.val() * 60 * 60 * 1000)) * (millisTime - millisStartHour - (30 * 60 * 1000));
+            } else {
+                current = (100 / (workHour.val() * 60 * 60 * 1000)) * (millisTime - millisStartHour);
+            };
             // current = (100 / (9 * 60 * 60 * 1000))
             //           * (((hours * 60 * 60 * 1000
             //              + minutes * 60 * 1000
@@ -212,7 +223,11 @@
             $('#day-bar').hide();
             $('#hidden-goods').show();
             if (res == 'END') {
-                $('#hidden-goods').text('퇴근!!!');
+                if (amPm == 'AM') {
+                    $('#hidden-goods').text('출근!!!');
+                } else {
+                    $('#hidden-goods').text('퇴근!!!');
+                }
             } else if (res = 'WEND') {
                 $('#hidden-goods').text('주말!!!');
             };

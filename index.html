@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valuelinku 근무시간</title>
+    <title>근무시간</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <style>
         #day-wrapper {
@@ -146,9 +146,12 @@
             if (days == 0 || days == 6) {
                 // 주말의 경우
                 endMsg('WEND');
-            } else if ((millisTime- millisStartHour) <= 0) {
+            } else if ((millisTime - millisStartHour) <= 0 && startHour < millisStartHour) {
                 endMsg('END');
-            };
+            } else {
+                $('#day-bar').show();
+                $('#hidden-goods').hide();
+            }
 
             let today = (day.getFullYear() + "/" + (day.getMonth() + 1) + "/" + day.getDate() + " " + krDays + "요일");
             let time = (amPm + ' ' + curTime + ":" + minutes + ":" + seconds);
@@ -163,19 +166,7 @@
             } else {
                 current = (100 / ((workHours.val() == 'all' ? 9 : 4) * 60 * 60 * 1000)) * (millisTime - millisStartHour);
             };
-            // current = (100 / (9 * 60 * 60 * 1000))
-            //           * (((hours * 60 * 60 * 1000
-            //              + minutes * 60 * 1000
-            //              + seconds * 1000
-            //              + millis) - 9 * 60 * 60 * 1000));
-                         
-            // 시작시간 적용
-            // var current = (100 / ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))
-            //              * (((day.getHours() * 60 * 60 * 1000
-            //                 + day.getMinutes() * 60 * 1000
-            //                 + day.getSeconds() * 1000
-            //                 + day.getMilliseconds()) - ($('#work-hour').val() * 60 * 60 * 1000 + $('#work-minute').val() * 60 * 1000))) - startHour;
-                            
+
             // 시작시간 적용
             if (current <= 100 && (hours > startHour
             || (hours == startHour && minutes >= enterMinute.val()))) {
@@ -183,13 +174,6 @@
                 $('#dBar').css('width', perc);
                 $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
             };
-
-            // if (current <= 100 && day.getHours() > 9) {
-            //     let perc = Math.floor(current) + '%';
-            //     // console.log(current);
-            //     $('#dBar').css('width', perc);
-            //     $('#dBar').text(Math.floor(current * 10000) / 10000 + '%');
-            // };
         };
 
         setInterval(function() {
@@ -227,12 +211,12 @@
             $('#hidden-goods').show();
             if (res == 'END') {
                 if (amPm == 'AM') {
-                    $('#hidden-goods').text('출근!!!');
+                    $('#hidden-goods').text('출근하자!!!');
                 } else {
-                    $('#hidden-goods').text('퇴근!!!');
+                    $('#hidden-goods').text('퇴근이닷!!!');
                 }
             } else if (res = 'WEND') {
-                $('#hidden-goods').text('주말!!!');
+                $('#hidden-goods').text('주말이얏!!!');
             };
         };
     </script>
